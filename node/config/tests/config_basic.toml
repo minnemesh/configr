@@ -1,0 +1,10 @@
+[[config]]
+name = "webserver"
+
+[[config.fetch]]
+method = "http"
+url = "https://example.com/test.txt"
+
+[[config.fetch]]
+method = "ipfs"
+url = "/ipfs/abcdef"

@@ -7,6 +7,17 @@ import (
 )
 
 type NodeConfig struct {
+	Config []AppConfig `toml:"config"`
+}
+
+type AppConfig struct {
+	Name  string           `toml:"name"`
+	Fetch []AppFetchConfig `toml:"fetch"`
+}
+
+type AppFetchConfig struct {
+	Method string `toml:"method"`
+	URL    string `toml:"url"`
 }
 
 func ReadConfigFromFile(reader io.Reader) (config NodeConfig, err error) {
