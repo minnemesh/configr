@@ -1,4 +1,8 @@
 # configr
+
+[![Build Status](https://travis-ci.org/minnemesh/configr.svg?branch=master)](https://travis-ci.org/minnemesh/configr)
+[![GoDoc](https://godoc.org/github.com/minnemesh/configr?status.svg)](https://godoc.org/github.com/minnemesh/configr)
+
 A high-reliability configuration management tool designed for mesh networking and distributed systems.
 
 Currently under development.
