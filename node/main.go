@@ -12,7 +12,7 @@ type State struct {
 }
 
 func (state *State) cmdGet(args *cli.Context) error {
-	fmt.Println("in command get")
+	fmt.Printf("Getting config: %v\n", args.String("name"))
 	return nil
 }
 
@@ -28,6 +28,14 @@ func main() {
 			Name:   "get",
 			Usage:  "get a configuration",
 			Action: s.cmdGet,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:   "name",
+					Usage:  "name of the config to get",
+					Value:  "default",
+					EnvVar: "CONFIG_NAME",
+				},
+			},
 		},
 	}
 
