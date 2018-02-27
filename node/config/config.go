@@ -20,6 +20,8 @@ type AppFetchConfig struct {
 	URL    string `toml:"url"`
 }
 
+// ReadConfigFromFile reads a TOML-formatted node configuration into a
+// config.NodeConfig struct and returns it.
 func ReadConfigFromFile(reader io.Reader) (config NodeConfig, err error) {
 	_, err = toml.DecodeReader(reader, &config)
 	if err != nil {
