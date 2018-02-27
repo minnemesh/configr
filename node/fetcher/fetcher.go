@@ -6,5 +6,5 @@ import (
 )
 
 type Fetcher interface {
-	Fetch(afc *config.AppFetchConfig) types.EncryptedAppConfig
+	Fetch(afc *config.AppFetchConfig) (types.EncryptedAppConfig, error)
 }

@@ -1,3 +1,5 @@
 package types
 
-type EncryptedAppConfig struct{}
+type EncryptedAppConfig struct {
+	Data []byte
+}
