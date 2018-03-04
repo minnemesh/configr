@@ -39,11 +39,13 @@ func TestReadConfigFromFile(t *testing.T) {
 		t.FailNow()
 	}
 
-	if result.Config[0].Name != "webserver" {
-		t.Error("Expected first app name to be 'webserver'")
-		t.Fail()
+	appconfig, present := result.Config["webserver"]
+	if !present {
+		t.Error("Could not find app config 'webserver'")
+		t.FailNow()
 	}
-	if len(result.Config[0].Fetch) != 2 {
+
+	if len(appconfig.Fetch) != 2 {
 		t.Error("Expected one AppFetchConfig")
 		t.Fail()
 	}

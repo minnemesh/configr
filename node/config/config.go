@@ -7,11 +7,10 @@ import (
 )
 
 type NodeConfig struct {
-	Config []AppConfig `toml:"config"`
+	Config map[string]AppConfig `toml:"config"`
 }
 
 type AppConfig struct {
-	Name  string           `toml:"name"`
 	Fetch []AppFetchConfig `toml:"fetch"`
 }
 
