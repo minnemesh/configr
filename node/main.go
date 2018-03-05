@@ -5,6 +5,9 @@ import (
 	"log"
 	"os"
 
+	"github.com/minnemesh/configr/common/types"
+	"github.com/minnemesh/configr/node/config"
+	"github.com/minnemesh/configr/node/fetcher"
 	"github.com/urfave/cli"
 )
 
@@ -12,8 +15,47 @@ type State struct {
 }
 
 func (state *State) cmdGet(args *cli.Context) error {
-	fmt.Printf("Getting config: %v\n", args.String("name"))
+	nodeConfig, err := config.ReadConfig()
+	if err != nil {
+		err := fmt.Errorf("Error loading node config: %v", err)
+		return err
+	}
+
+	app := args.String("name")
+	fmt.Printf("Getting config for app '%v'\n", app)
+	appconfig, present := nodeConfig.Config[app]
+	if !present {
+		return fmt.Errorf("Could not find app %v in node config.", app)
+	}
+
+	encConfig, err := state.fetchEncryptedAppConfig(&appconfig)
+	if err != nil {
+		return fmt.Errorf("Could not fetch config: %v", err)
+	}
+
+	fmt.Println(string(encConfig.Data))
+
 	return nil
+}
+
+func (state *State) fetchEncryptedAppConfig(appconfig *config.AppConfig) (types.EncryptedAppConfig, error) {
+	for _, fetchconfig := range appconfig.Fetch {
+		if fetchconfig.Method == "http" {
+			fetcher := fetcher.HTTPFetcher{}
+			encConfig, err := fetcher.Fetch(&fetchconfig)
+			if err != nil {
+				log.Printf("Error fetching config via %v. %v", fetchconfig.Method, err)
+				continue
+			} else {
+				log.Println("Fetched config via ", fetchconfig.Method)
+				return encConfig, nil
+			}
+		} else {
+			log.Printf("Unknown fetch method '%v' encountered", fetchconfig.Method)
+		}
+	}
+
+	return types.EncryptedAppConfig{}, fmt.Errorf("All configured fetch options failed.")
 }
 
 func main() {
